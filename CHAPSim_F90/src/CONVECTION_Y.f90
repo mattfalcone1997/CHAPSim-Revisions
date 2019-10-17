@@ -3,27 +3,27 @@
       use flow_info
       use mesh_info
       use init_info
-      IMPLICIT NONE    
-      
+      IMPLICIT NONE
+
       INTEGER(4)  :: IC, IM, IP
       INTEGER(4)  :: JC, JM, JP, JJ, JJM, JJP
       INTEGER(4)  :: KC, KM, KP
       INTEGER(4)  :: imsy
       INTEGER(4)  :: NII
       REAL(WP)     :: QDX2
-      REAL(WP)     :: H21, H22, H23    
-      REAL(WP)     :: q2s1     
+      REAL(WP)     :: H21, H22, H23
+      REAL(WP)     :: q2s1
       REAL(WP)     :: h23n
-      REAL(WP)     :: q1e, q1w     
+      REAL(WP)     :: q1e, q1w
       REAL(WP)     :: d11q2e
-      
-      DPH(:,:,:)=0.0_WP 
-     
+
+      DPH(:,:,:)=0.0_WP
+
       NII=1
       IF (MYID.EQ.0) THEN
          NII=2
       ENDIF
-     
+
       DO KC=1,NCL3
          KM=KMV(KC)
          KP=KPV(KC)
@@ -35,10 +35,10 @@
             jjm=jmv(jj)
             jjp=jpv(jj)
             DO IC=1,NCL1
-       
+
                IP=IPV(IC)
                IM=IMV(IC)
-     
+
                H21=((Q(IP,JC,KC,1)+Q(IP,JM,KC,1))*                     &
                     (Q(IP,JC,KC,2)+Q(IC,JC,KC,2))-                     &
                     (Q(IC,JC,KC,1)+Q(IC,JM,KC,1))*                     &
@@ -50,7 +50,7 @@
                         (q(ic,3,kc,2)+q(ic,2,kc,2)) -                  &
                         (q(ic,2,kc,2)/rc(2)+q2s1)*                     &
                         (q(ic,2,kc,2)+q(ic,1,kc,2))                    &
-                       )*QDX2  
+                       )*QDX2
                else
                   H22=((Q(IC,JP,KC,2)/rc(jjp)+Q(IC,JC,KC,2)/rc(jj))*   &
                        (Q(IC,JP,KC,2)+Q(IC,JC,KC,2))-                  &
@@ -63,13 +63,13 @@
                     ( Q(IC,JC,KC,3)/rm(jj)+      &
                       Q(IC,JM,KC,3)/rm(jjm) )*   &
                     ( Q(IC,JC,KC,2)+Q(IC,JC,KM,2) ) )*QDX3/rc(jj)        !@
-              DPH(IC,JC,KC)=-(H21+H22+H23)   
+              DPH(IC,JC,KC)=-(H21+H22+H23)
             ENDDO
          ENDDO
       ENDDO
 
 
-      if (iswitch.eq.2) then        
+      if (iswitch.eq.2) then
          do kc=1,NCL3
             km=kmv(kc)
             kp=kmv(kc)
@@ -78,7 +78,7 @@
                jj=JCL2G(JC)
                jjm=jmv(jj)
                do ic=1,NCL1
-                  q1e=q(ic,jc,kp,3)/rm(jj)+q(ic,jm,kp,3)/rm(jjm) 
+                  q1e=q(ic,jc,kp,3)/rm(jj)+q(ic,jm,kp,3)/rm(jjm)
                   q1w=q(ic,jc,kc,3)/rm(jj)+q(ic,jm,kc,3)/rm(jjm)
                   h23n=( (q1e+q1w)*.250_WP )**2
                   d11q2e= -(q1e-q1w)*DZI/rc(jj)
@@ -87,36 +87,36 @@
             enddo
          enddo
       endif
-        
+
       RETURN
       END SUBROUTINE CONVECTION_Y_tg
-      
-      
+
+
       SUBROUTINE CONVECTION_Y_io
       use flow_info
       use mesh_info
       use init_info
-      IMPLICIT NONE    
-      
+      IMPLICIT NONE
+
       INTEGER(4)  :: IC, IM, IP
       INTEGER(4)  :: JC, JM, JP, JJ, JJM, JJP
       INTEGER(4)  :: KC, KM, KP
       INTEGER(4)  :: imsy
       INTEGER(4)  :: NII
       REAL(WP)     :: QDX2
-      REAL(WP)     :: H21, H22, H23    
-      REAL(WP)     :: q2s1     
+      REAL(WP)     :: H21, H22, H23
+      REAL(WP)     :: q2s1
       REAL(WP)     :: h23n
-      REAL(WP)     :: q1e, q1w     
+      REAL(WP)     :: q1e, q1w
       REAL(WP)     :: d11q2e
-      
-      DPH_io(:,:,:)=0.0_WP  
+
+      DPH_io(:,:,:)=0.0_WP
 
       NII=1
       IF (MYID.EQ.0) THEN
          NII=2
       ENDIF
-     
+
       DO KC=1,NCL3
          KM=KMV(KC)
          KP=KPV(KC)
@@ -128,10 +128,10 @@
             jjm=jmv(jj)
             jjp=jpv(jj)
             DO IC=1,NCL1_io
-       
+
                IP=IPV_io(IC)
                IM=IMV_io(IC)
-     
+
                H21=((Q_io(IP,JC,KC,1)+Q_io(IP,JM,KC,1))*                     &
                     (Q_io(IP,JC,KC,2)+Q_io(IC,JC,KC,2))-                     &
                     (Q_io(IC,JC,KC,1)+Q_io(IC,JM,KC,1))*                     &
@@ -143,7 +143,7 @@
                         (q_io(ic,3,kc,2)+q_io(ic,2,kc,2)) -                  &
                         (q_io(ic,2,kc,2)/rc(2)+q2s1)*                     &
                         (q_io(ic,2,kc,2)+q_io(ic,1,kc,2))                    &
-                       )*QDX2  
+                       )*QDX2
                else
                   H22=((Q_io(IC,JP,KC,2)/rc(jjp)+Q_io(IC,JC,KC,2)/rc(jj))*   &
                        (Q_io(IC,JP,KC,2)+Q_io(IC,JC,KC,2))-                  &
@@ -156,13 +156,13 @@
                     ( Q_io(IC,JC,KC,3)/rm(jj)+      &
                       Q_io(IC,JM,KC,3)/rm(jjm) )*   &
                     ( Q_io(IC,JC,KC,2)+Q_io(IC,JC,KM,2) ) )*QDX3/rc(jj)        !@
-              DPH_io(IC,JC,KC)=-(H21+H22+H23)   
+              DPH_io(IC,JC,KC)=-(H21+H22+H23)
             ENDDO
          ENDDO
       ENDDO
 
 
-      if (iswitch.eq.2) then        
+      if (iswitch.eq.2) then
          do kc=1,NCL3
             km=kmv(kc)
             kp=kmv(kc)
@@ -171,7 +171,7 @@
                jj=JCL2G(JC)
                jjm=jmv(jj)
                do ic=1,NCL1_io
-                  q1e=q_io(ic,jc,kp,3)/rm(jj)+q_io(ic,jm,kp,3)/rm(jjm) 
+                  q1e=q_io(ic,jc,kp,3)/rm(jj)+q_io(ic,jm,kp,3)/rm(jjm)
                   q1w=q_io(ic,jc,kc,3)/rm(jj)+q_io(ic,jm,kc,3)/rm(jjm)
                   h23n=( (q1e+q1w)*.250_WP )**2
                   d11q2e= -(q1e-q1w)*DZI/rc(jj)
@@ -180,7 +180,6 @@
             enddo
          enddo
       endif
-        
+
       RETURN
       END SUBROUTINE CONVECTION_Y_io
-

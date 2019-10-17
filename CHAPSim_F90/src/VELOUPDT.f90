@@ -1,12 +1,12 @@
       SUBROUTINE VELOUPDT_tg(NS)
-      
+
       use init_info
       use mesh_info
       use flow_info
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
       INTEGER(4),INTENT(IN) :: NS
-      
+
       INTEGER(4) :: IC, IM
       INTEGER(4) :: JC, JM, JJ
       INTEGER(4) :: KC, KM
@@ -15,18 +15,19 @@
       REAL(WP)    :: COE1
 
       COE1 = DT*TALP(NS)
-      
+
       DO KC=1,NCL3
          DO JC=1,N2DO(MYID)
             DO IC=1,NCL1
                IM=IMV(IC)
-               DFX11=(DPH(IC,JC,KC)-DPH(IM,JC,KC))*DXI   
+               DFX11=(DPH(IC,JC,KC)-DPH(IM,JC,KC))*DXI
+               !Possibly where x and z velocities are modified
                Q(IC,JC,KC,1)=Q(IC,JC,KC,1)-DFX11*COE1
             ENDDO
          ENDDO
       ENDDO
-      
-    
+
+
       DO KC=1,NCL3
          KM=KMV(KC)
          DO JC=1,N2DO(MYID)
@@ -36,9 +37,9 @@
              ENDDO
          ENDDO
       ENDDO
-      
-          
-      NII=1            
+
+
+      NII=1
       IF (MYID.EQ.0) THEN
 
          NII=2
@@ -48,7 +49,7 @@
             ENDDO
          ENDDO
       ENDIF
-      
+
       IF (MYID.EQ.NPSLV) THEN
          DO KC=1,NCL3
             DO IC=1,NCL1
@@ -56,7 +57,7 @@
             ENDDO
          ENDDO
       ENDIF
-           
+
       DO KC=1,NCL3
          DO JC=NII,N2DO(MYID)
             JJ=JCL2G(JC)
@@ -67,37 +68,37 @@
             ENDDO
          ENDDO
       ENDDO
-      
+
       RETURN
       END SUBROUTINE VELOUPDT_tg
-      
+
       SUBROUTINE VELOUPDT_io(NS)
-      
+
       use init_info
       use mesh_info
       use flow_info
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
       INTEGER(4),INTENT(IN) :: NS
-      
+
       INTEGER(4) :: IC, IM
       INTEGER(4) :: JC, JM, JJ
       INTEGER(4) :: KC, KM
       INTEGER(4) :: NII
       REAL(WP)    :: DFX11, DFX22,DFX33
       REAL(WP)    :: COE1
-      
-      COE1 = DT*TALP(NS)   
+      !A modification of the x velocity near the wall
+      COE1 = DT*TALP(NS)
       DO KC=1,NCL3
          DO JC=1,N2DO(MYID)
             DO IC=1,NCL1_io
                IM=IMV_io(IC)
-               DFX11=(DPH_io(IC,JC,KC)-DPH_io(IM,JC,KC))*DXI   
+               DFX11=(DPH_io(IC,JC,KC)-DPH_io(IM,JC,KC))*DXI
                Q_io(IC,JC,KC,1)=Q_io(IC,JC,KC,1)-DFX11*COE1
             ENDDO
          ENDDO
       ENDDO
-          
+
       DO KC=1,NCL3
          KM=KMV(KC)
          DO JC=1,N2DO(MYID)
@@ -107,8 +108,8 @@
              ENDDO
          ENDDO
       ENDDO
-           
-      NII=1            
+
+      NII=1
       IF (MYID.EQ.0) THEN
          NII=2
          DO KC=1,NCL3
@@ -117,7 +118,7 @@
             ENDDO
          ENDDO
       ENDIF
-      
+
       IF (MYID.EQ.NPSLV) THEN
          DO KC=1,NCL3
             DO IC=1,NCL1_io
@@ -125,7 +126,7 @@
             ENDDO
          ENDDO
       ENDIF
-             
+
       DO KC=1,NCL3
          DO JC=NII,N2DO(MYID)
             JJ=JCL2G(JC)
@@ -136,8 +137,6 @@
             ENDDO
          ENDDO
       ENDDO
-      
+
       RETURN
       END SUBROUTINE VELOUPDT_io
-     
-

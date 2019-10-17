@@ -1,28 +1,30 @@
 
       SUBROUTINE LAPLACECOEF
       use mesh_info
-      IMPLICIT NONE     
-
+      IMPLICIT NONE
+      !=========================================================================
+      !Needs a more detailed look
+      !=========================================================================
       INTEGER(4) :: JC, JM, JP
       INTEGER(4) :: IDR
       INTEGER(4) :: NFIL
-      REAL(WP)    :: UCAJ 
-     
-      DO JC=1,NCL2      
+      REAL(WP)    :: UCAJ
+
+      DO JC=1,NCL2
          JP=JC+1
          AMPH(JC)= DYFI(JC)*DYCI(JC)
          APPH(JC)= DYFI(JC)*DYCI(JP)
       ENDDO
-      
+
 
       ACPH(1:NCL2)= -( AMPH(1:NCL2)+APPH(1:NCL2) )
-      
+
       ACPH(1)    = AMPH(1) + ACPH(1)
       AMPH(1)    = 0.0_WP
-      
+
       ACPH(NCL2) = APPH(NCL2) + ACPH(NCL2)
       APPH(NCL2) = 0.0_WP
-      
+
 
       DO IDR=1,3
          IF( (IDR.EQ.1) .OR. (IDR.EQ.3) ) THEN
@@ -58,11 +60,11 @@
             AMVR(NND2,IDR)=0.0_WP
             APVR(NND2,IDR)=0.0_WP
             ACVR(NND2,IDR)=1.0_WP
-            
+
          ENDIF
-         
+
       ENDDO
-      
+
 
       NFIL=16
       OPEN(NFIL,FILE='PHICOEF.dat')
@@ -78,9 +80,9 @@
                 ACPH(JC),  ACVR(JC,1), ACVR(JC,3), ACVR(JC,2)
       END DO
       CLOSE(NFIL)
-  
+
       RETURN
-      
+
       END SUBROUTINE LAPLACECOEF
 
 !**********************************************************************

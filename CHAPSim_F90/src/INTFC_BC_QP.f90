@@ -140,9 +140,9 @@
                     Q(I,N2DO(MYID)+1,K,N)=BREC_F(IK,N+1)
                  ENDDO
                  DO N=1,3,2
-                    Q(I,0,K,N)=-Q(I,1,K,N)
+                    Q(I,0,K,N)=-Q(I,1,K,N) !Where it enforces the lower wall BC
                  ENDDO
-                 Q(I,1,K,2)=0.0_WP
+                 Q(I,1,K,2)=0.0_WP !Sets y velocity near the wall to zero
                  Q(I,0,K,2)=0.0_WP
                ENDDO
           ENDDO
@@ -263,6 +263,7 @@
                     Q_io(I,N2DO(MYID)+1,K,N)=-Q_io(I,N2DO(MYID),K,N)
                  ENDDO
                  Q_io(I,N2DO(MYID)+1,K,2)=0.0_WP
+                
                 ENDDO
              ENDDO
 
@@ -295,7 +296,7 @@
                     Q_io(I,N2DO(MYID)+1,K,N)=BREC_F_io(IK,N+1)
                  ENDDO
                  DO N=1,3,2
-                    Q_io(I,0,K,N)=-Q_io(I,1,K,N)
+                    Q_io(I,0,K,N)=-Q_io(I,1,K,N) !Enforcing the no slip through gradient through 0
                  ENDDO
                  Q_io(I,1,K,2)=0.0_WP
                  Q_io(I,0,K,2)=0.0_WP
